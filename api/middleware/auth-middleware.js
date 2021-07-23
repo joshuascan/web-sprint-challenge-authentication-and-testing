@@ -1,10 +1,8 @@
-const db = require("../../data/dbConfig");
+const Users = require("../users/users-model");
 
 const checkUsernameAvailable = async (req, res, next) => {
   try {
-    const existing = await db("users")
-      .where("username", req.body.username)
-      .first();
+    const existing = await Users.getBy({ username: req.body.username }).first();
     if (existing) {
       next({ status: 422, message: "username taken" });
     } else {
