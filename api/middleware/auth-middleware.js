@@ -13,7 +13,7 @@ const checkUsernameAvailable = async (req, res, next) => {
   }
 };
 
-const validateNewUser = (req, res, next) => {
+const validateReqBody = (req, res, next) => {
   const { username, password } = req.body;
   if (username === undefined || password === undefined) {
     next({ status: 422, message: "username and password required" });
@@ -22,4 +22,4 @@ const validateNewUser = (req, res, next) => {
   }
 };
 
-module.exports = { checkUsernameAvailable, validateNewUser };
+module.exports = { checkUsernameAvailable, validateReqBody };

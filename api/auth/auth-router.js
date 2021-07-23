@@ -6,6 +6,7 @@ const {
 const router = require("express").Router();
 const Users = require("../users/users-model");
 const bcrypt = require("bcryptjs");
+const tokenBuilder = require("./token-builder");
 
 router.post(
   "/register",
@@ -47,8 +48,20 @@ router.post(
   }
 );
 
-router.post("/login", validateReqBody, (req, res) => {
-  res.end("implement login, please!");
+router.post("/login", validateReqBody, (req, res, next) => {
+  const { username, password } = req.body;
+  try {
+    Users.getBy({ username }).then(([user]) => {
+      if (user && bcrypt.compareSync(password, user.password)) {
+        const token = tokenBuilder(user);
+        res.status(200).json({ message: `welcome, ${user.username}`, token });
+      } else {
+        next({ status: 401, message: "invalid credentials" });
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
