@@ -1,5 +1,5 @@
 const {
-  validateNewUser,
+  validateReqBody,
   checkUsernameAvailable,
 } = require("../middleware/auth-middleware");
 
@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs");
 
 router.post(
   "/register",
-  validateNewUser,
+  validateReqBody,
   checkUsernameAvailable,
   (req, res, next) => {
     const { username, password } = req.body;
@@ -47,7 +47,7 @@ router.post(
   }
 );
 
-router.post("/login", (req, res) => {
+router.post("/login", validateReqBody, (req, res) => {
   res.end("implement login, please!");
   /*
     IMPLEMENT
